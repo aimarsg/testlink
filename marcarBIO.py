@@ -7,7 +7,7 @@ def obtenerIndices(relEvs):
     res = []
     #listaRels = relEvs.split('\n')
     for linea in relEvs:
-        if linea:
+        if linea: #solo coger lineas NO vacias
             elems = linea.split('\t') # 2:RML 3:EVENT
 
             indicesRml = elems[2].split('-')
@@ -37,48 +37,56 @@ def marcarTexto(text, rels, fich):
     i = 0 #indice del texto
     j = 0 #indice para recorrer rels
     f = False
-    for word in text.split():
+    for word in text.split(): #separar por palabras (por defecto por espacio en blanco)
         if j<len(rels):
             #si la palabra empieza por parentesis ignorarla para que coincidan los indices
-            if (word[0] == '('):
+            if (word[0] == '(' or word[0] == '='): #CAMBIO(añadir el =)
                 i += 1
-                word = word.rstrip("(")
-            if i==int(rels_ord[j][0]) or f:
+                #word = word.lstrip("(") #quitar el parentesis a la izquierda 
+            if i==int(rels_ord[j][0]) or f: #si coincide con el inicio del rel o tiene mas(f=True)
                 #marcar
-                if i+len(word.rstrip(".,()"))==int(rels_ord[j][1]):
+                #cuando tiene parentesis y es la unica palabra da error.--------------------
+                if i+len(word.strip(".,():;="))==int(rels_ord[j][1]): #CAMBIO importante de rstrip a strip. Porfin
+                    #tiene mismo indice que segunda parte de rel(fin de ese rel)
                     if f:
-                        t = (word, 'I-'+rels_ord[j][2])
+                        #es de INSIDE, y es el ultimo
+                        t = (word.strip(".,()=:;"), 'I-'+rels_ord[j][2])  #CAMBIO de lstrip a strip(para quitar de todo el string))
                         f = False
                     else:
-                        t = (word, 'B-'+rels_ord[j][2])
+                        #es de BEGIN, y No tiene mas
+                        t = (word.strip(".,()=:;"), 'B-'+rels_ord[j][2])
                     
-                    j=j+1
+                    j=j+1 #pasamos al siguiente rel
                 else:
-                    if f:
-                        t = (word, 'I-'+rels_ord[j][2])
-                    else:
+                    if f: #es de INSIDE, y tiene mas
+                        t = (word.strip(".,()=:;"), 'I-'+rels_ord[j][2])
+                    else: #es de BEGIN, y tiene mas INSIDE
                         f = True
-                        t = (word, 'B-'+rels_ord[j][2])
-            else:
-                t = (word, 'O')
-        else:
-            t = (word, 'O')
+                        t = (word.strip(".,()=:;"), 'B-'+rels_ord[j][2])
+            else: #sino la palabra no esta en el rel
+                t = (word.strip(".,()"), 'O')
+        else:#no hay mas rels
+            t = (word.strip(".,()"), 'O')
         word_tag.append(t)
         cadena = '\t'.join(map(str, t))
         fich.write(cadena+'\n')
-        i = i+len(word)
 
         #restar al indice lo que se ha sumado en caso de que la palabra empiece por parentesis
-        if (word[0] == '('):
+        if (word[0] == '(' or word[0] == '='):
             i -= 1
+            print("tiene parentesis al principio: " + word + str(i))
+
+        i = i+len(word) #pasamos a siguiente palabra
+        print("indice con parentesis: " + str(i))
+        
 
         #contar espacios tras la palabra
-        t =False
-        while not t and i<len(text)-2:
+        tiene =False
+        while not tiene and i<len(text)-2:
             if text[i]==(' '):
                 i=i+1
             else:
-                t=True
+                tiene=True
     return word_tag
 
     
@@ -93,8 +101,9 @@ if __name__ == "__main__":
     numDoc = 0
 
     for linea in archivo:
-        if linea.strip() != '':
-            doc.append(linea)
+        #strip para quitar todos los espacios en blanco de la linea
+        if linea.strip() != '': #si no es linea vacia
+            doc.append(linea) #añadir la linea al documento
         else:
             #linea vacia -> documento nuevo
             indices = []

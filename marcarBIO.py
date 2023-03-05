@@ -17,7 +17,7 @@ def obtenerIndices(relEvs):
 
             indicesEv = elems[3].split('-')
             inicioEv = indicesEv[0]
-            finEv = indicesEv[1]        
+            finEv = indicesEv[1]
             event = (inicioEv, finEv, "event")
 
             if rml not in res:
@@ -42,7 +42,7 @@ def marcarTexto(text, rels, fich):
             #si la palabra empieza por parentesis ignorarla para que coincidan los indices
             if (word[0] == '(' or word[0] == '='): #CAMBIO(añadir el =)
                 i += 1
-                #word = word.lstrip("(") #quitar el parentesis a la izquierda 
+                #word = word.lstrip("(") #quitar el parentesis a la izquierda
             if i==int(rels_ord[j][0]) or f: #si coincide con el inicio del rel o tiene mas(f=True)
                 #marcar
                 #cuando tiene parentesis y es la unica palabra da error.--------------------
@@ -55,7 +55,7 @@ def marcarTexto(text, rels, fich):
                     else:
                         #es de BEGIN, y No tiene mas
                         t = (word.strip(".,()=:;"), 'B-'+rels_ord[j][2])
-                    
+
                     j=j+1 #pasamos al siguiente rel
                 else:
                     if f: #es de INSIDE, y tiene mas
@@ -71,6 +71,10 @@ def marcarTexto(text, rels, fich):
         cadena = '\t'.join(map(str, t))
         fich.write(cadena+'\n')
 
+        # añadir una linea vacia si es el fin de una frase
+        if (word[len(word)-1])=='.': # . -> asumimos fin de oracion
+            fich.write('\n') # añadir linea vacia
+
         #restar al indice lo que se ha sumado en caso de que la palabra empiece por parentesis
         if (word[0] == '(' or word[0] == '='):
             i -= 1
@@ -78,7 +82,7 @@ def marcarTexto(text, rels, fich):
 
         i = i+len(word) #pasamos a siguiente palabra
         print("indice con parentesis: " + str(i))
-        
+
 
         #contar espacios tras la palabra
         tiene =False
@@ -89,14 +93,14 @@ def marcarTexto(text, rels, fich):
                 tiene=True
     return word_tag
 
-    
+
 
 
 
 if __name__ == "__main__":
-    
-    archivo = open('100098.txt', 'r',  encoding='utf-8')
-    #resultado = open('res.txt', 'w',  encoding='utf-8')
+
+    archivo = open('training.txt', 'r',  encoding='utf-8')
+    resultado = open('res.txt', 'w',  encoding='utf-8')
     doc = []
     numDoc = 0
 
@@ -110,8 +114,8 @@ if __name__ == "__main__":
             texto = doc[0].split("|t|")[1]
             numDoc = doc[0].split("|t|")[0]
 
-            resultado = open('./res/doc'+str(numDoc)+'.txt', 'w',  encoding='utf-8')
-            
+            #resultado = open('./res/doc'+str(numDoc)+'.txt', 'w',  encoding='utf-8')
+
 
             if len(doc)>1: #si existen indices obtenerlos
                 indices = obtenerIndices(doc[1:len(doc)])
@@ -126,9 +130,9 @@ if __name__ == "__main__":
         indices = []
         texto = doc[0].split("|t|")[1]
         numDoc = doc[0].split("|t|")[0]
-        
-        resultado = open('./res/doc'+str(numDoc)+'.txt', 'w',  encoding='utf-8')
-        
+
+        #resultado = open('./res/doc'+str(numDoc)+'.txt', 'w',  encoding='utf-8')
+
 
         if len(doc)>1: #si existen indices obtenerlos
             indices = obtenerIndices(doc[1:len(doc)])

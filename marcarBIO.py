@@ -66,7 +66,7 @@ def marcarTexto(text, rels, fich):
                 else: #sino la palabra no esta en el rel
                     t = (word, 'O')
             else:#no hay mas rels
-                t = (word.strip(".,()"), 'O')
+                t = (word, 'O')
 
             word_tag.append(t)
             cadena = '\t'.join(map(str, t))
@@ -86,7 +86,7 @@ def marcarTexto(text, rels, fich):
 if __name__ == "__main__":
 
     archivo = open('training.txt', 'r',  encoding='utf-8')
-    resultado = open('100001.txt', 'w',  encoding='utf-8')
+    resultado = open('res.txt', 'w',  encoding='utf-8')
     doc = []
     numDoc = 0
 
@@ -106,7 +106,7 @@ if __name__ == "__main__":
             if len(doc)>1: #si existen indices obtenerlos
                 indices = obtenerIndices(doc[1:len(doc)])
 
-            texto = open('1'+numDoc+'.tsv', 'r',  encoding='utf-8')
+            texto = open('./datos/'+numDoc+'.tsv', 'r',  encoding='utf-8')
 
             res = marcarTexto(texto.read(), indices, resultado)
             #reiniciar variables
@@ -125,7 +125,7 @@ if __name__ == "__main__":
         if len(doc)>1: #si existen indices obtenerlos
             indices = obtenerIndices(doc[1:len(doc)])
 
-        texto = open('1'+numDoc + '.tsv', 'r', encoding='utf-8')
+        texto = open('./datos/'+numDoc + '.tsv', 'r', encoding='utf-8')
         res = marcarTexto(texto.read(), indices, resultado)
 
         #resultado.write(res)

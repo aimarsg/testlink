@@ -60,6 +60,7 @@ def insertarMarcas(elem1, elem2, texto):
     return texto
 
 def marcarTexto(rels, fich, resultado):
+    fich = fich.rstrip('\n')
     i = 0
 
     while i < len(rels):
@@ -68,7 +69,7 @@ def marcarTexto(rels, fich, resultado):
         elem1 = rels[i] # indice del elemento 1 -  RML
         elem2 = rels[i+1] # indice del elemento 2- EVENT
         texto = fich
-        insertarMarcas(elem1, elem2, texto)
+        texto = insertarMarcas(elem1, elem2, texto)
 
         resultado.write(texto+'\t'+str(1)+'\n')
 

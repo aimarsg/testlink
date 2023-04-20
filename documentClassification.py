@@ -39,23 +39,23 @@ def insertarMarcas(elem1, elem2, texto):
 
     if elem2[2] == 'event':
         # si es event añadimos <TOKEV>
-        texto = texto[:int(elem2[1])] + '<TOKEV>' + texto[int(elem2[1]):]  # añadir al final
-        texto = texto[:int(elem2[0])] + '<TOKEV>' + texto[int(elem2[0]):]  # añadir al principio
+        texto = texto[:int(elem2[1])] + ' <TOKEV>' + texto[int(elem2[1]):]  # añadir al final
+        texto = texto[:int(elem2[0])] + '<TOKEV> ' + texto[int(elem2[0]):]  # añadir al principio
 
     if elem2[2] == 'rml':
         # si es event añadimos <TOKRML>
-        texto = texto[:int(elem2[1])] + '<TOKRML>' + texto[int(elem2[1]):]  # añadir al final
-        texto = texto[:int(elem2[0])] + '<TOKRML>' + texto[int(elem2[0]):]  # añadir al principio
+        texto = texto[:int(elem2[1])] + ' <TOKRML>' + texto[int(elem2[1]):]  # añadir al final
+        texto = texto[:int(elem2[0])] + '<TOKRML> ' + texto[int(elem2[0]):]  # añadir al principio
 
     if elem1[2] == 'event':
         # si es event añadimos <TOKEV>
-        texto = texto[:int(elem1[1])] + '<TOKEV>' + texto[int(elem1[1]):]  # añadir al final
-        texto = texto[:int(elem1[0])] + '<TOKEV>' + texto[int(elem1[0]):]  # añadir al principio
+        texto = texto[:int(elem1[1])] + ' <TOKEV>' + texto[int(elem1[1]):]  # añadir al final
+        texto = texto[:int(elem1[0])] + '<TOKEV> ' + texto[int(elem1[0]):]  # añadir al principio
 
     if elem1[2] == 'rml':
         # si es event añadimos <TOKRML>
-        texto = texto[:int(elem1[1])] + '<TOKRML>' + texto[int(elem1[1]):]  # añadir al final
-        texto = texto[:int(elem1[0])] + '<TOKRML>' + texto[int(elem1[0]):]  # añadir al principio
+        texto = texto[:int(elem1[1])] + ' <TOKRML>' + texto[int(elem1[1]):]  # añadir al final
+        texto = texto[:int(elem1[0])] + '<TOKRML> ' + texto[int(elem1[0]):]  # añadir al principio
 
     return texto
 
